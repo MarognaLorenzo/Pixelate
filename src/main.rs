@@ -1,32 +1,57 @@
 mod functions;
+pub mod panels;
 
+use eframe::egui;
 use image::{ColorType, DynamicImage, GenericImageView};
 use easy_paths::get_absolute_path;
-use image::imageops::FilterType;
-use crate::functions::{avarage, separate_colors, sum_images};
+use egui::{Context, FontDefinitions, Id, Response};
+use egui::panel::TopBottomSide;
+use egui::WidgetType::ComboBox;
+use image::imageops::{FilterType, Gaussian};
 
+
+use crate::functions::{avarage, manupulation, separate_colors, sum_images};
 
 fn main() {
-    let path = get_absolute_path(&"./images/samples/retina.jpg");
-    println!("{:?}", path);
-    if easy_paths::is_existing_path(&path) {
+    manupulation();
 
-        let mut img = image::open(path).unwrap();
-        img.crop(100,0,500,500).save("images/output/cropped.png").unwrap();
-        img.adjust_contrast(30.0).save("images/output/contrast.png").unwrap();
-        img.blur(-40.0).save("images/output/blurred.png").unwrap();
-        img.brighten(-100).save("images/output/brightened.png").unwrap();
-        img.grayscale().save("images/output/grayscale.png").unwrap();
-        img.filter3x3(&[0.5 , 1. , 0.5 , 1. , 2. , 1. , 0.5 , 1. , 0.5]).save("images/output/filtered.png").unwrap();
-        img.thumbnail(1400,1000).save("images/output/thimbnail.png").unwrap();
-        img.resize(300,455, FilterType::Triangle).save("images/output/resized.png").unwrap();
-        let (r,g,b) = separate_colors(&img).unwrap();
-        r.save("images/output/decomposition_test/red.png").unwrap();
-        g.save("images/output/decomposition_test/green.png").unwrap();
-        b.save("images/output/decomposition_test/blue.png").unwrap();
-        let summed = sum_images(&b, &g).unwrap();
-        summed.save("images/output/sum_test/summed.png").unwrap();
-        let average = avarage(&b, &g).unwrap();
-        average.save("images/output/average_test/average.png").unwrap();
+    let native_options = eframe::NativeOptions::default();
+    eframe::run_native("My egui App", native_options, Box::new(|cc| Box::new(MyEguiApp::new(cc))));
+}
+
+#[derive(Default)]
+struct MyEguiApp {
+    active_image: DynamicImage,
+    selected_number: i32
+}
+
+impl MyEguiApp {
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        // Customize egui here with cc.egui_ctx.set_fonts and cc.egui_ctx.set_visuals.
+        // Restore app state using cc.storage (requires the "persistence" feature).
+        // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
+        // for e.g. egui::PaintCallback.
+        Self{
+            active_image: {
+                let path = get_absolute_path(&"./images/samples/retina.jpg");
+                println!("{:?}", path);
+                let img = image::open(path).unwrap().resize(500,200, Gaussian);
+                img
+            },
+            selected_number: 1,
+        }
+
+    }
+
+}
+
+impl eframe::App for MyEguiApp {
+    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+        println!("{:?}", get_absolute_path(&"./images/samples/retina.jpg"));
+        self.central_panel(ctx);
+        self.top_panel(ctx);
+        self.right_panel(ctx);
+        self.left_panel(ctx);
+        self.bottom_panel(ctx);
     }
 }
