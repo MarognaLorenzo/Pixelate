@@ -1,17 +1,21 @@
+use std::ops::Add;
+use easy_paths::get_absolute_path;
 use egui::Context;
 use image::GenericImageView;
-use crate::MyEguiApp;
+use image::imageops::Gaussian;
+use crate::GUI;
 
-impl MyEguiApp {
-    pub fn central_panel(&mut self, ctx: &Context) {
+impl GUI {
+    pub fn load_central_panel(&mut self, ctx: &Context) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.layout().cross_align();
+            ui.layout().vertical_align().to_factor();
+            ui.layout().horizontal_align().to_factor();
             ui.heading("Hello World!");
-            let _ = ui.button("where are you?");
+
             let th = &ui.ctx().load_texture(
                 "My picture",
-                egui::ColorImage::from_rgb([self.active_image.dimensions().0 as usize, self.active_image.dimensions().1 as usize],
-                                           self.active_image.as_bytes()),
+                egui::ColorImage::from_rgb([self.active_image.0.dimensions().0 as usize, self.active_image.0.dimensions().1 as usize],
+                                           self.active_image.0.as_bytes()),
                 Default::default(),
             );
             ui.image(th, th.size_vec2())

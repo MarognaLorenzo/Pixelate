@@ -1,8 +1,8 @@
 use egui::Id;
-use crate::MyEguiApp;
+use crate::GUI;
 
-impl MyEguiApp {
-    pub fn left_panel(&mut self, ctx: &egui::Context) {
+impl GUI {
+    pub fn load_left_panel(&mut self, ctx: &egui::Context) {
         egui::SidePanel::left(Id::new(3)).show(ctx, |ui| {
             ui.heading("left panel");
         });
