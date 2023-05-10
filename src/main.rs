@@ -22,7 +22,7 @@ fn main() {
 
 #[derive(Default)]
 struct GUI {
-    active_image: (DynamicImage, String),
+    active_image: Option<(DynamicImage, String)>,
     selected_image: String,
     available_images: Vec<String>
 }
@@ -34,11 +34,7 @@ impl GUI {
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
         // for e.g. egui::PaintCallback.
         Self{
-            active_image: {
-                let path = get_absolute_path(&"./images/samples/retina.jpg");
-                let img = image::open(path).unwrap();
-                (img, String::from("retina"))
-            },
+            active_image: None,
             selected_image: String::default(),
             available_images: {
                 let mut res = vec![];
@@ -58,10 +54,12 @@ impl GUI {
 
 impl eframe::App for GUI {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+        frame.set_window_title("Pixelate");
+        frame.set_maximized(true);
         self.load_central_panel(ctx);
         self.load_top_panel(ctx);
         self.load_right_panel(ctx);
-        self.load_left_panel(ctx);
+        // self.load_left_panel(ctx);
         self.load_bottom_panel(ctx);
     }
 }

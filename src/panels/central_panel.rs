@@ -11,14 +11,15 @@ impl GUI {
             ui.layout().vertical_align().to_factor();
             ui.layout().horizontal_align().to_factor();
             ui.heading("Hello World!");
-
-            let th = &ui.ctx().load_texture(
-                "My picture",
-                egui::ColorImage::from_rgb([self.active_image.0.dimensions().0 as usize, self.active_image.0.dimensions().1 as usize],
-                                           self.active_image.0.as_bytes()),
-                Default::default(),
-            );
-            ui.image(th, th.size_vec2())
+            if let Some(active_image) = &self.active_image {
+                let th = &ui.ctx().load_texture(
+                    "My picture",
+                    egui::ColorImage::from_rgb([active_image.0.dimensions().0 as usize, active_image.0.dimensions().1 as usize],
+                                               active_image.0.as_bytes()),
+                    Default::default(),
+                );
+                ui.image(th, th.size_vec2());
+            } else {}
         });
     }
 }
