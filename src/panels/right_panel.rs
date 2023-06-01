@@ -24,7 +24,15 @@ impl GUI {
                 let e_button = ui.button("Export image");
                 ui.text_edit_singleline(&mut self.export_name);
                 if e_button.clicked() {
-                    self.cached_image.as_ref().unwrap().0.save("images/output/".to_string().add(&*self.export_name).add(".jpg")).expect("yeahh");
+                    let img = &self.cached_image.as_ref().unwrap().0;
+                    let image = match self.effects.grayscale {
+                        true => {
+                            let a = &self.cached_image.as_ref().unwrap().0.clone();
+                            a.grayscale()
+                        }
+                        false => { self.cached_image.as_ref().unwrap().0.clone() }
+                    };
+                    image.save("images/output/".to_string().add(&*self.export_name).add(".jpg")).expect("yeahh");
                     self.cached_image = None;
                     self.selected_image = String::default();
                     self.effects = Effects::new();

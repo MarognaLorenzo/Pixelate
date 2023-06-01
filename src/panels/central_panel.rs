@@ -5,9 +5,6 @@ use crate::GUI;
 impl GUI {
     pub fn load_central_panel(&mut self, ctx: &Context) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.layout().vertical_align().to_factor();
-            ui.layout().horizontal_align().to_factor();
-            ui.heading("Hello World!");
             if let Some(updating_image) = &self.cached_image {
                 let th = &ui.ctx().load_texture(
                     "My picture",
@@ -33,7 +30,9 @@ impl GUI {
                     Default::default(),
                 );
                 ui.image(th, th.size_vec2());
-            } else {}
+            } else {
+                ui.label("\n\n\n\nPlease choose a picture to upload from the right\n ==>");
+            }
         });
     }
 }

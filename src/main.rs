@@ -89,12 +89,9 @@ impl GUI {
 impl eframe::App for GUI {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         frame.set_window_title("Pixelate");
-        frame.set_maximized(true);
-
         self.load_central_panel(ctx);
         self.load_top_panel(ctx);
         self.load_right_panel(ctx);
-        // self.load_left_panel(ctx);
         self.load_bottom_panel(ctx);
     }
 }

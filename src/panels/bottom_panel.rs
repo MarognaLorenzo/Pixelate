@@ -8,8 +8,6 @@ impl GUI {
         egui::TopBottomPanel::bottom(Id::new(1)).show(
             ctx,
             |ui| {
-                ui.heading("bottom altro");
-
                 if let Some(image) = &mut self.cached_image && let Some(base) = &self.base_image {
                     let brighten_slider = ui.add(egui::Slider::new(&mut image.1.brighten, -100..=100)
                         .text("Brighten"));

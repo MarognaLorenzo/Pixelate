@@ -6,7 +6,7 @@ use crate::GUI;
 impl GUI {
     pub fn load_top_panel(&mut self, ctx: &Context) {
         egui::TopBottomPanel::top(Id::new(0)).show(ctx, |ui| {
-            ui.heading("top qualcosa");
+            ui.heading("Welcome to Pixelate!");
             if self.cached_image.is_none() {
                 if ui.button("Upload image").clicked() {
                     let path = "./images/samples/".to_string().add(self.selected_image.as_str());
